@@ -1,0 +1,34 @@
+<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+  <label for="name">Name:</label>
+  <input id="name" formControlName="name" />
+  <div *ngIf="registrationForm.get('name')?.invalid && registrationForm.get('name')?.touched">
+    <small *ngIf="registrationForm.get('name')?.errors?.['required']">name is required</small>
+    <small *ngIf="registrationForm.get('name')?.errors?.['minlength']">Minimum 3 characters</small>
+  </div>
+
+  <label for="email">Email:</label>
+  <input id="email" formControlName="email" />
+  <div *ngIf="registrationForm.get('email')?.invalid && registrationForm.get('email')?.touched">
+    <small *ngIf="registrationForm.get('email')?.errors?.['required']">Email is required</small>
+    <small *ngIf="registrationForm.get('email')?.errors?.['email']">Invalid email format</small>
+  </div>
+
+  <label for="password">Password:</label>
+  <input id="password" type="password" formControlName="password" />
+  <div *ngIf="registrationForm.get('password')?.invalid && registrationForm.get('password')?.touched">
+    <small *ngIf="registrationForm.get('password')?.errors?.['required']">Password is required</small>
+    <small *ngIf="registrationForm.get('password')?.errors?.['minlength']">Minimum 6 characters</small>
+  </div>
+
+  <label for="mobileNumber">Mobile Number:</label>
+  <input id="mobileNumber" formControlName="mobileNumber" />
+  <div *ngIf="registrationForm.get('mobileNumber')?.invalid && registrationForm.get('mobileNumber')?.touched">
+    <small *ngIf="registrationForm.get('mobileNumber')?.errors?.['required']">mobile Number is required</small>
+    <small *ngIf="registrationForm.get('mobileNumber')?.errors?.['minlength']">Minimum 11 number</small>
+  </div>
+
+
+  <button type="submit" [disabled]="registrationForm.invalid">Register</button>
+  <p *ngIf="errorMessage" style="color: red;">{{ errorMessage }}</p>
+
+</form>

@@ -1,0 +1,50 @@
+<div class="timesheet-container">
+  <h2>Timesheet Records</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Login Time</th>
+        <th>Logout Time</th>
+        <th>Total Hours</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let timesheet of timesheets; let i = index">
+        <td>
+          <input type="date" [(ngModel)]="timesheet.registerDate" [readonly]="editIndex !== i" [disabled]="true" >
+        </td>
+        <td>
+          <input type="time" [(ngModel)]="timesheet.loginTime" [readonly]="editIndex !== i">
+        </td>
+        <td>
+          <input type="time" [(ngModel)]="timesheet.logoutTime" [readonly]="editIndex !== i">
+        </td>
+        <td>
+          <input type="number" [(ngModel)]="timesheet.totalLoggedHours" [readonly]="editIndex !== i" [disabled]="true">
+        </td>
+        <td>
+          <button *ngIf="editIndex !== i" (click)="enableEdit(i)">Edit</button>
+          <button *ngIf="editIndex === i" (click)="saveEdit(timesheet)">Save</button>
+          <button (click)="deleteTimesheet(timesheet.id)">Delete</button>
+        </td>
+      </tr>
+      <tr [formGroup]="newTimesheetForm">
+        <td><input type="date" formControlName="registerDate" [max]="today"></td>
+        <td><input type="time" formControlName="loginTime"></td>
+        <td><input type="time" formControlName="logoutTime"></td>
+        <td><input type="number" formControlName="totalLoggedHours"></td>
+        <td><button (click)="addNewTimesheet()">Add</button></td>
+      </tr>
+    </tbody>
+  </table>
+  <div>
+    <small *ngIf="newTimesheetForm.hasError('logoutAfterLogin')" class="error" style="color: red;" >Logout time must be after login time</small><br>
+  </div>
+</div>
+
+<div *ngIf="errorMessage" class="error-message">
+  {{ errorMessage }}
+</div>

@@ -1,6 +1,4 @@
-# ITIDATask - Angular
-
-## Pre
+## Prerequisites
 - Angular CLI: 19.0.0
 - Node: 22.11.0
 - Package Manager: npm 10.9.0

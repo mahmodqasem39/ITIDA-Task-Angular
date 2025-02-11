@@ -225,12 +225,12 @@
           <clipPath id="a"><path fill="#fff" d="M0 0h982v239H0z" /></clipPath>
         </defs>
       </svg>
-      <h1>Hello, {{ title }}</h1>
-      <p>Congratulations! Your app is running. 🎉</p>
+      <h4>Hello, {{ title }}</h4>
+      <h5>Congratulations! Your app is running. 🎉</h5>
       <nav>
         <div>
-          <button *ngIf="isLoginRoute()" routerLink="/register">Go to Register</button>
-          <button *ngIf="isRegisterRoute()" routerLink="/login">Go to Login</button>
+          <button *ngIf="isLoginRoute()" (click)="goToRegister()">Go to Register</button>
+          <button *ngIf="isRegisterRoute()" (click)="goToLogin()">Go to Login</button>
         </div>
       </nav>
     </div>

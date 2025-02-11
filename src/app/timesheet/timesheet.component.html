@@ -3,7 +3,6 @@
     Sign Out
   </button>
 </div>
-
 <div class="timesheet-container">
   <h2>Timesheet Records</h2>
   <table>
@@ -66,5 +65,5 @@
 </div>
 
 <div *ngIf="errorMessage" class="error-message">
-  {{ errorMessage }}
+  <p [innerHTML]="errorMessage"></p>
 </div>

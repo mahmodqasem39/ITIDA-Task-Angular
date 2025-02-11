@@ -21,4 +21,14 @@ export class AppComponent {
   isRegisterRoute(): boolean {
     return this.router.url === '/register';
   }
+
+  goToLogin() :void{
+    this.router.navigate(['/login']);
+  }
+
+  goToRegister():void {
+    this.router.navigate(['/register']);
+  }
+  
+  
 }

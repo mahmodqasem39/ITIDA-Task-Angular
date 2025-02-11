@@ -1,7 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
 import { AuthService } from './auth.service';
+import { error } from 'node:console';
 
 @Injectable({
   providedIn: 'root'
@@ -38,13 +39,27 @@ export class TimesheetService {
   }
 
   createTimeSheet(timesheet: any): Observable<any> {
-    timesheet.userID = this.authService.getUserId()
+    timesheet.userID = this.authService.getUserId();
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${this.authService.getToken()}`,
       'Content-Type': 'application/json'
     });
-    return this.http.post(`${this.creaetimesheetUrl}`, timesheet,{headers});
+    return this.http.post(`${this.creaetimesheetUrl}`, timesheet, { headers })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          console.error('Error on add new timesheet data:', error);
+          if (error.error && error.error.errors) {
+            return throwError(() => error.error.errors); 
+          }
+          if (error.error && error.error.message) {
+            return throwError(() => new Error(error.error.message))
+          }
+  
+          return throwError(() => new Error('An unexpected error occurred.'));
+        })
+      );
   }
+  
 
   updateTimeSheet(timesheet : any): Observable<any> {
     const headers = new HttpHeaders({

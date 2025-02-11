@@ -62,25 +62,28 @@ export class TimesheetComponent {
 
   addNewTimesheet() {
     this.newTimesheetForm.markAllAsTouched();
-    if (this.newTimesheetForm.valid) {
+    
+    if (this.newTimesheetForm.valid) {  
       this.timesheetService.createTimeSheet(this.newTimesheetForm.value).subscribe({
         next: () => {
           this.fetchTimesheetData();
-          this.newTimesheetForm.reset();
+          this.newTimesheetForm.reset(); 
+          this.errorMessage = ''; 
           this.isLoading = false;
-          this.errorMessage = '';
         },
         error: (error) => {
-          if (error.error && error.error.errors) {
-            const messages = Object.values(error.error.errors).flat();
-            this.errorMessage = messages.join('<br>'); 
+          this.isLoading = false;  
+          if (Array.isArray(error)) {
+            this.errorMessage = error.join('<br>');  
           } else {
-            this.errorMessage = 'An unexpected error occurred.';
+            this.errorMessage = error.message;
           }
         }
       });
     }
   }
+  
+  
 
   deleteTimesheet(id: number) {
     this.timesheetService.deleteTimeSheet(id).subscribe({

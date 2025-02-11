@@ -11,6 +11,9 @@ export class TimesheetService {
   private timesheetUrl = 'http://localhost:5296/api/Timesheet/GetAll'; 
   private creaetimesheetUrl = 'http://localhost:5296/api/Timesheet/Add'; 
   private deletetimesheetUrl = 'http://localhost:5296/api/Timesheet/Delete'; 
+  private updatetimesheetUrl = 'http://localhost:5296/api/Timesheet/Update'; 
+  private signOutsheetUrl = 'http://localhost:5296/api/Account/Logout'; 
+
 
 
   constructor(private http: HttpClient, private authService: AuthService) {}
@@ -43,6 +46,35 @@ export class TimesheetService {
     return this.http.post(`${this.creaetimesheetUrl}`, timesheet,{headers});
   }
 
+  updateTimeSheet(timesheet : any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.authService.getToken()}`, 
+    });
+    return this.http.put(`${this.updatetimesheetUrl}`, timesheet,
+    {
+      responseType: 'text'
+      ,headers
+    }).pipe(
+      catchError(error => {
+        console.error('Error updating timesheet data:', error);
+        return throwError(() => new Error('Failed to update timesheet data'));
+      })
+    );
+  }
+
+  signOut(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.authService.getToken()}`, 
+    });
+    return this.http.post(`${this.signOutsheetUrl}`, {}, { headers, responseType: 'text' }).pipe(
+      catchError(error => {
+        console.error('Error in sign out', error);
+        return throwError(() => new Error('Failed to sign out'));
+      })
+    );
+  }
+  
+
   deleteTimeSheet(id: any): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.authService.getToken()}`, 
@@ -57,4 +89,6 @@ export class TimesheetService {
       })
     );
   }
+
+
 }

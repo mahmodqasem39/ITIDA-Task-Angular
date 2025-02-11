@@ -2,6 +2,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { Component } from '@angular/core';
 import { TimesheetService } from '../services/timesheet.service';
 import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-timesheet',
@@ -18,7 +19,7 @@ export class TimesheetComponent {
   today: string = new Date().toISOString().split('T')[0];
 
 
-  constructor(private timesheetService: TimesheetService,private fb: FormBuilder) {
+  constructor(private timesheetService: TimesheetService,private fb: FormBuilder,private router: Router) {
     this.newTimesheetForm = this.fb.group({
       registerDate: ['',[Validators.required]],
       loginTime: ['',[Validators.required]],
@@ -50,16 +51,17 @@ export class TimesheetComponent {
   }
 
   saveEdit(timesheet: any) {
-    // this.timesheetService.updateTimeSheet(timesheet.id, timesheet).subscribe({
-    //   next: () => {
-    //     this.editIndex = null;
-    //     this.fetchTimesheetData();
-    //   },
-    //   error: (error) => console.error('Error updating timesheet:', error)
-    // });
+    this.timesheetService.updateTimeSheet(timesheet).subscribe({
+      next: () => {
+        this.editIndex = null;
+        this.fetchTimesheetData();
+      },
+      error: (error) => console.error('Error updating timesheet:', error)
+    });
   }
 
   addNewTimesheet() {
+    this.newTimesheetForm.markAllAsTouched();
     if (this.newTimesheetForm.valid) {
       this.timesheetService.createTimeSheet(this.newTimesheetForm.value).subscribe({
         next: () => {
@@ -90,6 +92,15 @@ export class TimesheetComponent {
     });
   }
 
+  signOut(): void {
+    this.timesheetService.signOut().subscribe({
+      next: () => {
+        localStorage.removeItem('token');
+        this.router.navigate(['/login']); 
+      },
+      error: (error) => console.error('Error duning sign out:', error)
+    });
+  }
 }
 
 export function logoutAfterLoginValidator(): ValidatorFn {

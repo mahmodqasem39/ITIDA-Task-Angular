@@ -1,6 +1,11 @@
+<div style="text-align: right; margin-bottom: 20px;">
+  <button (click)="signOut()" style="background-color: red; color: white; padding: 5px 10px; border: none; cursor: pointer;">
+    Sign Out
+  </button>
+</div>
+
 <div class="timesheet-container">
   <h2>Timesheet Records</h2>
-
   <table>
     <thead>
       <tr>
@@ -27,16 +32,31 @@
         </td>
         <td>
           <button *ngIf="editIndex !== i" (click)="enableEdit(i)">Edit</button>
-          <button *ngIf="editIndex === i" (click)="saveEdit(timesheet)">Save</button>
-          <button (click)="deleteTimesheet(timesheet.id)">Delete</button>
+          <button *ngIf="editIndex === i" (click)="saveEdit(timesheet)" style="color:green;">Save</button>
+          <button (click)="deleteTimesheet(timesheet.id)"  style="color: red;">Delete</button>
         </td>
       </tr>
       <tr [formGroup]="newTimesheetForm">
-        <td><input type="date" formControlName="registerDate" [max]="today"></td>
-        <td><input type="time" formControlName="loginTime"></td>
-        <td><input type="time" formControlName="logoutTime"></td>
+        <td>
+          <input type="date" formControlName="registerDate" [max]="today">
+          <small *ngIf="newTimesheetForm.get('registerDate')?.hasError('required') && newTimesheetForm.get('registerDate')?.touched" class="error" style="color: red;">
+           Date is required
+          </small>
+        </td>
+        <td>
+          <input type="time" formControlName="loginTime">
+          <small *ngIf="newTimesheetForm.get('loginTime')?.hasError('required') && newTimesheetForm.get('loginTime')?.touched" class="error" style="color: red;">
+            loginTime is required
+          </small>
+        </td>
+        <td>
+          <input type="time" formControlName="logoutTime">
+          <small *ngIf="newTimesheetForm.get('logoutTime')?.hasError('required') && newTimesheetForm.get('logoutTime')?.touched" class="error" style="color: red;">
+            logoutTime is required
+          </small>
+        </td>
         <td><input type="number" formControlName="totalLoggedHours"></td>
-        <td><button (click)="addNewTimesheet()">Add</button></td>
+        <td><button (click)="addNewTimesheet()" style="color: blue;">Add</button></td>
       </tr>
     </tbody>
   </table>
